@@ -44,7 +44,7 @@ class AuthController implements Controller {
                 next(error)
             }
             if(!user) {
-                next(new HttpException(401,info.message)); 
+                return next(new HttpException(401,info.message)); 
             }
             // req.login 실행시 serialize, deserialize
             return req.login(user,(loginError:Error)=>{
