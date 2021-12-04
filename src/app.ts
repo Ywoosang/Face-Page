@@ -10,6 +10,7 @@ import * as cookieParser from 'cookie-parser';
 import Controller from './interfaces/controller.interface';
 import { loggerMiddleware } from './middlewares/logger.middleware';
 import  errorMiddleware from './middlewares/error.middleware';
+import passportConfig from './passport';
 
 dotenv.config();
 
@@ -54,9 +55,9 @@ class App {
             }
         }))
         this.app.use(cookieParser(process.env.COOKIE_SECRET)); 
+        passportConfig()
         this.app.use(passport.initialize()); 
         this.app.use(passport.session())
-   
     }
 
     private initializeControllers(controllers: Controller[]) {
