@@ -4,6 +4,9 @@ import * as dotenv from 'dotenv';
 import * as cors from 'cors';
 import * as hpp from 'hpp';
 import * as helmet from 'helmet';
+import * as passport from 'passport'
+import * as session from 'express-session';
+import * as cookieParser from 'cookie-parser';
 import Controller from './interfaces/controller.interface';
 import { loggerMiddleware } from './middlewares/logger.middleware';
 import  errorMiddleware from './middlewares/error.middleware';
@@ -12,11 +15,11 @@ dotenv.config();
 
 class App {
     public app: express.Application;
-    public port: number | string;
+    public port: number;
 
     constructor(controllers: Controller[]) {
         this.app = express();
-        this.port =   process.env.PORT || 3000;
+        this.port =   Number(process.env.PORT) || 3000;
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
         this.initializeErrorHandling();
@@ -35,12 +38,25 @@ class App {
             this.app.use(cors());
             this.app.use(morgan("dev"));
         }
+         
         // parse application/json 파싱
         this.app.use(express.json());
         //  application/x-www-form-urlencoded 파싱
         this.app.use(express.urlencoded({
             extended: true
         }));
+        this.app.use(session({
+            resave: false,
+            saveUninitialized: false,
+            secret: process.env.COOKIE_SECRET,
+            cookie: {
+                secure: false
+            }
+        }))
+        this.app.use(cookieParser(process.env.COOKIE_SECRET)); 
+        this.app.use(passport.initialize()); 
+        this.app.use(passport.session())
+   
     }
 
     private initializeControllers(controllers: Controller[]) {
