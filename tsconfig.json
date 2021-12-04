@@ -7,6 +7,10 @@
       "outDir": "./dist",
       "moduleResolution": "node",   
       "sourceMap": true,
+      "strictNullChecks" : false,
+      // decorators
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true
     },
     "include": [
       "src/**/*.ts",
