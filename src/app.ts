@@ -5,7 +5,8 @@ import * as cors from 'cors';
 import * as hpp from 'hpp';
 import * as helmet from 'helmet';
 import Controller from './interfaces/controller.interface';
-import { loggerMiddleware } from './middlewares/logger.middleware'
+import { loggerMiddleware } from './middlewares/logger.middleware';
+import  errorMiddleware from './middlewares/error.middleware';
 
 dotenv.config();
 
@@ -18,14 +19,13 @@ class App {
         this.port =   process.env.PORT || 3000;
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
+        this.initializeErrorHandling();
     }
 
     private initializeMiddlewares() {
         this.app.use(loggerMiddleware); 
         if (process.env.NODE_ENV === "production"){
-            this.app.use(cors({
-                origin: ['https://kscic.co.kr','https://www.kscic.co.kr']
-            })); 
+            this.app.use(cors()); 
             this.app.use(morgan("combined"));
             this.app.use(helmet({
                 contentSecurityPolicy: false
@@ -43,11 +43,15 @@ class App {
         }));
     }
 
-    private initializeControllers(controllers) {
-        controllers.forEach((controller) => {
+    private initializeControllers(controllers: Controller[]) {
+        controllers.forEach((controller: Controller) => {
             this.app.use('/api', controller.router);
         });
     }
+
+    private initializeErrorHandling() {
+        this.app.use(errorMiddleware);
+      }
 
     public listen() {
         this.app.listen(this.port, () => {
