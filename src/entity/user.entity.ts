@@ -6,6 +6,9 @@ export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column({ nullable: true})
+  snsId: string;
+
   @Column()
   name: string;
 
