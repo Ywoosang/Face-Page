@@ -15,9 +15,18 @@ class AuthDao {
         return user;
     };
 
+    public getUserBySnsInfo = async(snsId: string,provider:string) => {
+        const user  = await this.userRepository.findOne({
+            snsId: snsId,
+            provider: provider
+        });
+        return user;
+    }
+
     public postUser = async (user: any) => {
         const newUser =  this.userRepository.create(user);
         await this.userRepository.save(newUser);
+        return newUser;
     }
 }
 
