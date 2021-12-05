@@ -7,11 +7,8 @@ class AuthService {
     private authDao = new AuthDao(); 
 
     public registerUser = async (user : RegisterUserDto) => {
-        console.log(user);
-        
         const exUser = await this.authDao.getUserByEmail(user.email);
         if (exUser) {
-            console.log('이미 사용자가 존재합니다.');
             throw new HttpException(400,'이미 사용자가 존재합니다.');
         }
         const hash = await bcrypt.hash(user.password,12)
