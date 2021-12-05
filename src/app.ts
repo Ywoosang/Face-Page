@@ -36,7 +36,10 @@ class App {
             }));
             this.app.use(hpp());
         } else if(process.env.NODE_ENV === "development") {
-            this.app.use(cors());
+            this.app.use(cors({
+                origin: true,
+                credentials: true
+            }));
             this.app.use(morgan("dev"));
         }
          
