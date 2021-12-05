@@ -9,9 +9,6 @@ class RegisterUserDto {
 
   @IsString()
   public password: string;
- 
-  @IsString()
-  public provider: string;
 }
  
 export default RegisterUserDto;
