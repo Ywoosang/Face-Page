@@ -1,9 +1,9 @@
 import * as dotenv from 'dotenv'
 import App from './app';
 import UploadController from './controllers/upload.controller';
-// import DownloadController from './controllers/download.controller;
+import PostController from './controllers/post.controller';
 import AuthController from './controllers/auth.controller';
-
+import DownloadController from './controllers/download.controller';
 // typeorm
 import { createConnection } from "typeorm";
 // import ormconfig from './config/typeorm.config';
@@ -45,7 +45,9 @@ import { createConnection } from "typeorm";
     const app = new App(
         [
           new UploadController(),
-          new AuthController()
+          new AuthController(),
+          new PostController(),
+          new DownloadController()
         ]
       );
        app.listen();
