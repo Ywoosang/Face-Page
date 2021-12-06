@@ -13,7 +13,6 @@ class PhotoController implements Controller {
     }
 
     private initializeRoutes() {
-        // 이미지 업로드 
         this.router.get(`${this.path}/pixabay`, this.getPixabayImage);
     }
 
