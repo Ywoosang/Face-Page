@@ -1,10 +1,9 @@
 import AWS from '../config/aws.config';
-import * as dotenv from 'dotenv';
-dotenv.config();
+import '../env';
 
 class StreamingService {
     private s3 = new AWS.S3()
-    
+
     public getStreamingHeader = async (range: string) => {
         const videoInfo = await this.s3.headObject({ Bucket: process.env.S3_BUCKET, Key: process.env.S3_DEMO_VIDEO_KEY }).promise();
         // {

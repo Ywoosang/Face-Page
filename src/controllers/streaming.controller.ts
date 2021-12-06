@@ -1,8 +1,7 @@
 import * as express from 'express';
 import Controller from '../interfaces/controller.interface';
 import StreamingService from '../services/streaming.service';
-import * as dotenv from 'dotenv';
-dotenv.config();
+import '../env';
 
 class StreamingController implements Controller {
     public path = '/image';

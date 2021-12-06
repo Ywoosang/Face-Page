@@ -6,11 +6,13 @@ import * as hpp from 'hpp';
 import * as helmet from 'helmet';
 import * as passport from 'passport'
 import * as session from 'express-session';
-import * as cookieParser from 'cookie-parser';
+import * as connectRedis from 'connect-redis';
 import Controller from './interfaces/controller.interface';
 import { loggerMiddleware } from './middlewares/logger.middleware';
-import  errorMiddleware from './middlewares/error.middleware';
+import errorMiddleware from './middlewares/error.middleware';
 import passportConfig from './passport';
+import client from './config/redis.config';
+import './env';
 
 dotenv.config();
 
@@ -20,47 +22,65 @@ class App {
 
     constructor(controllers: Controller[]) {
         this.app = express();
-        this.port =   Number(process.env.PORT) || 3000;
+        this.port = Number(process.env.PORT) || 3000;
         this.initializeMiddlewares();
         this.initializeControllers(controllers);
         this.initializeErrorHandling();
     }
 
     private initializeMiddlewares() {
-        this.app.use(loggerMiddleware); 
-        if (process.env.NODE_ENV === "production"){
-            this.app.use(cors()); 
+        this.app.use(loggerMiddleware);
+        if (process.env.NODE_ENV === "production") {
+            this.app.use(cors());
             this.app.use(morgan("combined"));
             this.app.use(helmet({
                 contentSecurityPolicy: false
             }));
             this.app.use(hpp());
-        } else if(process.env.NODE_ENV === "development") {
+        } else if (process.env.NODE_ENV === "development") {
             this.app.use(cors({
                 origin: true,
                 credentials: true
             }));
             this.app.use(morgan("dev"));
         }
-         
         // parse application/json 파싱
         this.app.use(express.json());
         //  application/x-www-form-urlencoded 파싱
-        this.app.use(express.urlencoded({
-            extended: true
-        }));
-        this.app.use(session({
-            resave: false,
-            saveUninitialized: false,
-            secret: process.env.COOKIE_SECRET,
-            cookie: {
-                secure: false
+        this.app.use(express.urlencoded({ extended: true }));
+        if(process.env.NODE_ENV !== 'test'){
+            const RedisStore = connectRedis(session);
+            const sessionOption = {
+                resave: false,
+                saveUninitialized: false,
+                secret: process.env.COOKIE_SECRET,
+                cookie: {
+                    secure: false,
+                    // 쿠키 수명 설정 
+                    maxAge: 1000 * 60 * 24
+                },
+                store: new RedisStore({
+                    client: client,
+                    ttl: 200
+                })
             }
-        }))
-        this.app.use(cookieParser(process.env.COOKIE_SECRET)); 
+            // 세션 미들웨어 사용 
+            this.app.use(session(sessionOption));
+           
+        } else {
+            this.app.use(session({
+                resave: false,
+                saveUninitialized: false,
+                secret: process.env.COOKIE_SECRET,
+                cookie: {
+                    secure: false
+                }
+            }))
+        }
         passportConfig()
-        this.app.use(passport.initialize()); 
+        this.app.use(passport.initialize());
         this.app.use(passport.session())
+        
     }
 
     private initializeControllers(controllers: Controller[]) {
@@ -71,11 +91,15 @@ class App {
 
     private initializeErrorHandling() {
         this.app.use(errorMiddleware);
-      }
+    }
+
+    public getServer() {
+        return this.app;
+    }
 
     public listen() {
         this.app.listen(this.port, () => {
-            console.log(`server listening on port ${this.port}`)
+            console.log(`SERVER LISTENING ON PORT ${this.port}`)
         });
     }
 }

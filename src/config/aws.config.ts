@@ -1,6 +1,5 @@
 import * as AWS from 'aws-sdk'; 
-import * as dotenv from 'dotenv'; 
-dotenv.config(); 
+import '../env';
  
 AWS.config.update({
     apiVersion: "2010-12-01",

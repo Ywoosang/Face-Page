@@ -1,8 +1,7 @@
 import * as express from 'express';
 import Controller from '../interfaces/controller.interface';
-import * as dotenv from 'dotenv';
 import DownlodaService from '../services/download.service'; 
-dotenv.config();
+import '../env';
 
 class DownloadController implements Controller {
     public path = '/image';

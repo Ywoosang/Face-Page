@@ -1,8 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne,CreateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column,BaseEntity, ManyToOne,CreateDateColumn } from "typeorm";
 import { User } from "./user.entity";
 
 @Entity()
-export class Post {
+export class Post extends BaseEntity{
     @PrimaryGeneratedColumn()
     id: number;
 

@@ -1,9 +1,8 @@
 import * as passport from 'passport'
 import * as passportGoogle  from 'passport-google-oauth2';
-import * as dotenv from 'dotenv'
 import AuthDao from '../daos/auth.dao';
-dotenv.config();
-
+import '../env';
+ 
 const GoogleStrategy = passportGoogle.Strategy
 export default () => {
    const authDao = new AuthDao();

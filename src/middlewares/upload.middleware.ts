@@ -1,8 +1,7 @@
 import * as multerS3 from 'multer-s3';
 import * as multer from 'multer';
 import AWS from '../config/aws.config'; 
-import * as dotenv from 'dotenv';
-dotenv.config()
+import '../env';
 
 const storage = multerS3({
     s3: new AWS.S3(),

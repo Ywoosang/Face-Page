@@ -1,6 +1,8 @@
 import {getRepository} from 'typeorm';
 import { Post } from '../entity/post.entity'; 
-import RegisterPostDto from '../dtos/post.dto';
+import RegisterPostServiceDto from '../dtos/registerPostService.dto';
+import UserDto from '../dtos/user.dto';
+
 
 class PostAao {
     private postRepository = getRepository(Post);
@@ -12,11 +14,15 @@ class PostAao {
         return posts;
     };
 
-    public registerPost = async(user:any,post: RegisterPostDto) => {
-        const newPost = this.postRepository.create(post);
+    public registerPost = async(post: RegisterPostServiceDto,user:UserDto ) => {
+        const newPost:any = this.postRepository.create(post);
         newPost.user = user;
         await this.postRepository.save(newPost);
         return newPost;
+    }
+
+    public deletePostByPostId = async(id: number) => {
+        await this.postRepository.delete({ id })
     }
 }
 

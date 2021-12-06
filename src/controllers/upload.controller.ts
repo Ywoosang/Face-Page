@@ -1,8 +1,7 @@
 import * as express from 'express';
 import Controller from '../interfaces/controller.interface';
 import upload from '../middlewares/upload.middleware';
-import * as dotenv from 'dotenv';
-dotenv.config();
+import '../env';
 
 class UploadController implements Controller {
     public path = '/image';

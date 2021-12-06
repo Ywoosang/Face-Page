@@ -1,8 +1,7 @@
 import * as passport from 'passport'
 import * as passportNaver  from 'passport-naver';
-import * as dotenv from 'dotenv'
 import AuthDao from '../daos/auth.dao';
-dotenv.config();
+import '../env';
 
 const NaverStrategy = passportNaver.Strategy
 export default () => {

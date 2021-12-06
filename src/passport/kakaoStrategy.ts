@@ -1,8 +1,7 @@
 import * as passport from 'passport'
 import * as passportKakao  from 'passport-kakao';
-import * as dotenv from 'dotenv'
 import AuthDao from '../daos/auth.dao';
-dotenv.config();
+import '../env';
 
 const KakaoStrategy = passportKakao.Strategy
 export default () => {

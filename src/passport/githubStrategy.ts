@@ -1,9 +1,7 @@
 import * as passport from 'passport'
 import * as passportGithub  from 'passport-github';
-import * as dotenv from 'dotenv'
 import AuthDao from '../daos/auth.dao';
-dotenv.config();
-
+import '../env';
 const GithubStrategy = passportGithub.Strategy
 export default () => {
    const authDao = new AuthDao();
