@@ -1,0 +1,65 @@
+version: '3.7'
+services:
+  app:
+    build:
+      context : .
+      dockerfile: Dockerfile.dev
+    container_name: fage-app
+    env_file: ./.env.development
+    depends_on: 
+      - mysqldb
+      - redisdb
+    ports:
+      - "8000:8000"
+    environment: 
+      - AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+      - AWS_SECRET_KEY=$AWS_SECRET_KEY
+      - S3_BUCKET=$S3_BUCKET
+      - PORT=$PORT
+      - COOKIE_SECRET=$COOKIE_SECRET
+      - KAKAO_CLIENT_ID=$KAKAO_CLIENT_ID
+      - KAKAO_CLIENT_SECRET=$KAKAO_CLIENT_SECRET
+      - GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID
+      - GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET
+      - NAVER_CLIENT_ID=$NAVER_CLIENT_ID
+      - NAVER_CLIENT_SECRET=$NAVER_CLIENT_SECRET
+      - GITHUB_CLIENT_ID=$GITHUB_CLIENT_ID
+      - GITHUB_CLIENT_SECRET=$GITHUB_CLIENT_SECRET
+      - MYSQL_PORT=$MYSQL_PORT
+      - MYSQL_USERNAME=$MYSQL_USERNAME
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASENAME=$MYSQL_DATABASENAME
+      - PIXABAY_KEY=$PIXABAY_KEY
+    volumes:
+      - ./src:/usr/app/src
+    networks: 
+      - fage-net
+    
+  mysqldb:
+    env_file: ./.env
+    image: mysql:8.0
+    container_name: fage-mysql
+    ports:
+      - "3306:3306"
+    command:  --init-file /data/application/init.sql
+    environment: 
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+    volumes:
+      - ./init.sql:/data/application/init.sql
+    cap_add: 
+      - SYS_NICE
+    networks: 
+      - fage-net
+  
+  redisdb:
+    image: redis:6.2.3-alpine
+    container_name: fage-redis
+    restart: always
+    command: redis-server
+    ports : 
+      - 6379:6379
+    networks: 
+      - fage-net
+
+networks: 
+  fage-net:
