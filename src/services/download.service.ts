@@ -1,7 +1,5 @@
-import AWS from '../config/aws.config';
-import * as dotenv from 'dotenv';
 import axios from 'axios'; 
-dotenv.config();
+import '../env'; 
 
 class DownloadService {
     public getReadStream = async (url:string) => {
