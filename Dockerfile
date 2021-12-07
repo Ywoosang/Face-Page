@@ -6,3 +6,4 @@ COPY tsconfig-build.json .
 RUN npm install
 COPY src ./src
 RUN npm run build
+RUN npm run production

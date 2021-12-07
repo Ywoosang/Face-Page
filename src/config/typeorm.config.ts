@@ -1,4 +1,5 @@
 import '../env';
+import * as path from 'path';
 
 const ormconfig = {
     type: "mysql",
@@ -9,7 +10,9 @@ const ormconfig = {
     database: process.env.MYSQL_DATABASENAME!,
     synchronize: true,
     logging: false,
-    entities: ["dist/entity/**/*.js","src/entity/**/*.ts"],
+    entities: [
+      path.resolve(__dirname, '../**/*.entity{.ts,.js}'),
+   ],
     migrations: ["src/migration/**/*.ts"],
     subscribers: ["src/subscriber/**/*.ts"],
     cli: {

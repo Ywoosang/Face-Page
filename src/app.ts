@@ -11,7 +11,11 @@ import Controller from './interfaces/controller.interface';
 import { loggerMiddleware } from './middlewares/logger.middleware';
 import errorMiddleware from './middlewares/error.middleware';
 import passportConfig from './passport';
-import client from './config/redis.config';
+import sessionConfig from './config/session.config';
+import * as expressMySqlSession from "express-mysql-session";
+
+
+
 import './env';
 
 dotenv.config();
@@ -49,24 +53,19 @@ class App {
         //  application/x-www-form-urlencoded 파싱
         this.app.use(express.urlencoded({ extended: true }));
         if(process.env.NODE_ENV !== 'test'){
-            const RedisStore = connectRedis(session);
-            const sessionOption = {
+            const MysqlStore = expressMySqlSession(session); 
+            // 세션 미들웨어 사용 
+            const sessionStore = new MysqlStore(sessionConfig)
+            this.app.use(session({
                 resave: false,
                 saveUninitialized: false,
                 secret: process.env.COOKIE_SECRET,
                 cookie: {
                     secure: false,
-                    // 쿠키 수명 설정 
                     maxAge: 1000 * 60 * 24
                 },
-                store: new RedisStore({
-                    client: client,
-                    ttl: 200
-                })
-            }
-            // 세션 미들웨어 사용 
-            this.app.use(session(sessionOption));
-           
+                store: sessionStore
+            }))
         } else {
             this.app.use(session({
                 resave: false,
