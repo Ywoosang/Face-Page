@@ -4,6 +4,7 @@ import PostController from './controllers/post.controller';
 import AuthController from './controllers/auth.controller';
 import DownloadController from './controllers/download.controller';
 import PhotoController from './controllers/photo.controller';
+import PingController from './controllers/healthcheck.controller'; 
 import { createConnection } from "typeorm";
 import ormconfig from './config/typeorm.config';
 import './env';
@@ -22,7 +23,8 @@ import './env';
           new AuthController(),
           new PostController(),
           new DownloadController(),
-          new PhotoController()
+          new PhotoController(),
+          new PingController()
         ]
       );
        app.listen();
