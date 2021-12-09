@@ -18,16 +18,9 @@ CI/CD : Github Actions
 Streaming: S3 using Express video streaming
 APIs: Pixabay, Google, Naver, Kakao, Github  Oauth2
 ```
-## Clone
-
-다음 명령어를 입력해 프로젝트를 클론한다. 
-```
-git clone git@github.com:Ywoosang/Face-Page-Server.git
-``` 
-
 ## Layered Architecture
 
-프로젝트 아키텍쳐는 Layered Architecture 를 적용했다. DTO 를 통해 어떤 모양의 데이터 객체로 들어오게 할 것인지 설계했다.
+프로젝트 아키텍쳐는 Layered Architecture 를 적용했다. DTO 를 도입해 어떤 모양의 데이터 객체로 들어오게 할 것인지 설계했다.
 
 Control Layer : Controller
 Business Layer : Service
@@ -48,6 +41,13 @@ src/
 ├── app.ts          # application
 └── server.ts       # server start
 ```
+
+## Clone
+
+다음 명령어를 입력해 프로젝트를 클론한다. 
+```
+git clone git@github.com:Ywoosang/Face-Page-Server.git
+``` 
 
 ## Setup
 1. 다음에서 .example 을 제거한다.
